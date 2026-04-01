@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1280">
+    <title>DRIP HOUSE | All Products</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="./dh.png">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { bebas: ['"Bebas Neue"', 'cursive'] },
+                    height: {
+                        'img-card': '260px',
+                        'cart-thumb': '64px',
+                    },
+                    width: {
+                        'cart-thumb': '64px',
+                        'cart-side': '420px',
+                    },
+                    maxWidth: {
+                        'modal': '420px',
+                        'cart-side': '96vw',
+                    },
+                    backgroundImage: {
+                        'cart-thumb-bg': 'linear-gradient(135deg, #e8d3b8, #d4a97a)',
+                        'nl-grad': 'linear-gradient(135deg, #221208, #3e2210)',
+                    },
+                    boxShadow: { 'cart': '-8px 0 40px rgba(0,0,0,0.25)' },
+                    zIndex: {
+                        'modal': '2000',
+                        'cart': '1050',
+                        'overlay': '1040',
+                        'toast': '9999',
+                    },
+                    animation: { 'marquee': 'marquee 20s linear infinite' },
+                    keyframes: {
+                        marquee: {
+                            '0%': { transform: 'translateX(0)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Barlow', sans-serif;
+        }
+
+        .font-bebas {
+            font-family: 'Bebas Neue', cursive;
+        }
+
+        .product-card {
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        .product-card img {
+            transition: transform 0.4s ease;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.06);
+        }
+
+        /* Active filter pill */
+        .filter-tab.active {
+            background-color: #b45309 !important;
+            color: white !important;
+        }
+
+        /* Shop nav highlight */
+        .nav-shop-active {
+            background-color: #b45309 !important;
+            color: white !important;
+        }
+
+        /* Sidebar open */
+        .sidebar-open {
+            transform: translateX(0) !important;
+        }
+
+        /* Scrollbar */
+        #cartItems::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        #cartItems::-webkit-scrollbar-track {
+            background: #f5f5f4;
+        }
+
+        #cartItems::-webkit-scrollbar-thumb {
+            background: #d97706;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+
+<body class="bg-stone-50 text-stone-900">
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="bg-stone-900 sticky top-0 z-50">
+        <div class="container d-flex align-items-center justify-content-between py-2">
+            <a href="index.html"
+                class="font-bebas text-3xl tracking-widest text-amber-300 no-underline px-5 py-1 rounded-md hover:bg-amber-600 transition-all duration-300">
+                DRIP<span class="text-amber-600">-</span>HOUSE
+            </a>
+
+            <ul class="d-none d-lg-flex list-unstyled mb-0 gap-2">
+                <li><a href="index.html#home"
+                        class="text-amber-200 hover:text-white no-underline font-semibold text-sm px-5 py-2 rounded-md hover:bg-amber-600 transition-all duration-300">Home</a>
+                </li>
+                <li><a href="products.html"
+                        class="nav-shop-active text-white no-underline font-semibold text-sm px-5 py-2 rounded-md transition-all duration-300">Shop</a>
+                </li>
+                <li><a href="index.html#categories"
+                        class="text-amber-200 hover:text-white no-underline font-semibold text-sm px-5 py-2 rounded-md hover:bg-amber-600 transition-all duration-300">Categories</a>
+                </li>
+                <li><a href="index.html#contact"
+                        class="text-amber-200 hover:text-white no-underline font-semibold text-sm px-5 py-2 rounded-md hover:bg-amber-600 transition-all duration-300">Contact</a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-2">
+                <button onclick="openModal('loginModal')"
+                    class="border border-amber-600/50 text-amber-300 hover:bg-amber-700 hover:text-white font-bold text-sm px-4 py-2 rounded-full bg-transparent transition-all">
+                    <i class="fas fa-user me-1"></i> Login
+                </button>
+                <button onclick="openModal('registerModal')"
+                    class="bg-amber-700 hover:bg-amber-500 text-white font-bold text-sm px-4 py-2 rounded-full border-0 transition-all">Register</button>
+                <button onclick="openCart()"
+                    class="bg-stone-700 hover:bg-stone-600 text-white font-bold text-sm px-4 py-2 rounded-full border-0 d-flex align-items-center gap-2 transition-all">
+                    <span id="cartBadge"
+                        class="bg-red-500 text-white rounded-full w-5 h-5 text-xs font-bold d-flex align-items-center justify-content-center">0</span>
+                    <i class="fas fa-shopping-bag"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    
+
+    
+    <section class="bg-stone-900 py-12">
+        <div class="container text-center">
+            <p class="text-amber-600 font-bold tracking-widest text-xs uppercase mb-2">Summer 2026 Collection</p>
+            <h1 class="font-bebas text-7xl tracking-widest text-white mb-2">All Products</h1>
+            <p class="text-amber-200/40 text-sm">Explore our full range of premium menswear</p>
+            <!-- Breadcrumb -->
+            <div class="d-flex justify-content-center align-items-center gap-2 mt-3 text-sm text-amber-200/40">
+                <a href="index.html" class="text-amber-400 no-underline hover:text-amber-300">Home</a>
+                <i class="fas fa-chevron-right text-xs"></i>
+                <span class="text-white">Shop</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== AI ===== -->
+    <div class="bg-amber-700 overflow-hidden py-3">
+        <div class="inline-block whitespace-nowrap animate-marquee">
+            <span class="font-bebas text-white tracking-widest text-base mx-5">FREE SHIPPING OVER $50</span>
+            <span class="text-white/30 mx-2">!!</span>
+            <span class="font-bebas text-white tracking-widest text-base mx-5">NEW ARRIVALS 2026</span>
+            <span class="text-white/30 mx-2">!!</span>
+            <span class="font-bebas text-white tracking-widest text-base mx-5">30% OFF ALL TEES</span>
+            <span class="text-white/30 mx-2">!!</span>
+            <span class="font-bebas text-white tracking-widest text-base mx-5">PREMIUM MENSWEAR</span>
+            <span class="text-white/30 mx-2">!!</span>
+            <span class="font-bebas text-white tracking-widest text-base mx-5">FREE RETURNS — 14 DAYS</span>
+            <span class="text-white/30 mx-2">!!</span>
+            <span class="font-bebas text-white tracking-widest text-base mx-5">FREE SHIPPING OVER $50</span>
+            <span class="text-white/30 mx-2">!!</span>
+            <span class="font-bebas text-white tracking-widest text-base mx-5">NEW ARRIVALS 2026</span>
+            <span class="text-white/30 mx-2">!!</span>
+            <span class="font-bebas text-white tracking-widest text-base mx-5">30% OFF ALL TEES</span>
+            <span class="text-white/30 mx-2">!!</span>
+            <span class="font-bebas text-white tracking-widest text-base mx-5">PREMIUM MENSWEAR</span>
+            <span class="text-white/30 mx-2">!!</span>
+            <span class="font-bebas text-white tracking-widest text-base mx-5">FREE RETURNS — 14 DAYS</span>
+            <span class="text-white/30 mx-2">!!</span>
+        </div>
+    </div>
+    <section class="py-5 bg-amber-50">
+        <div class="container">
+
+            
+            <div class="d-flex flex-wrap align-items-center justify-content-between mb-5 gap-3">
+                <!-- Filter Tabs -->
+                <div class="d-flex flex-wrap gap-2">
+                    <button onclick="doFilter('all', this)"
+                        class="filter-tab active border-2 border-amber-700/30 font-bold text-sm px-5 py-2 rounded-full bg-amber-700 text-white">All</button>
+                    <button onclick="doFilter('tshirt', this)"
+                        class="filter-tab border-2 border-amber-700/30 font-bold text-sm px-5 py-2 rounded-full bg-transparent text-amber-900">T-Shirts</button>
+                    <button onclick="doFilter('jacket', this)"
+                        class="filter-tab border-2 border-amber-700/30 font-bold text-sm px-5 py-2 rounded-full bg-transparent text-amber-900">Jackets</button>
+                    <button onclick="doFilter('pants', this)"
+                        class="filter-tab border-2 border-amber-700/30 font-bold text-sm px-5 py-2 rounded-full bg-transparent text-amber-900">Pants</button>
+                    <button onclick="doFilter('acc', this)"
+                        class="filter-tab border-2 border-amber-700/30 font-bold text-sm px-5 py-2 rounded-full bg-transparent text-amber-900">Accessories</button>
+                    <button onclick="doFilter('sale', this)"
+                        class="filter-tab border-2 border-amber-700/30 font-bold text-sm px-5 py-2 rounded-full bg-transparent text-amber-900">🔥
+                        On Sale</button>
+                </div>
+
+                <!-- Sort -->
+                <div class="d-flex align-items-center gap-2">
+                    <label class="text-stone-500 text-sm font-semibold">Sort by:</label>
+                    <select onchange="doSort(this.value)"
+                        class="border border-amber-300 rounded-full px-4 py-2 text-sm font-semibold text-stone-700 bg-white focus:outline-none focus:border-amber-600">
+                        <option value="default">Featured</option>
+                        <option value="price-asc">Price: Low → High</option>
+                        <option value="price-desc">Price: High → Low</option>
+                        <option value="name">Name A–Z</option>
+                    </select>
+                </div>
+            </div>
+
+           
+            <p class="text-stone-400 text-sm mb-4 ps-1" id="resultCount">Showing all products</p>
+
+            
+            <div class="row g-4" id="productsGrid">
+
+               
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="tshirt" data-price="24.99"
+                    data-name="Classic Black Shirt">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div class="position-relative bg-stone-100 overflow-hidden">
+                            
+                            <img src="./2.jpg" alt="Classic Black Shirt" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <div class="w-full h-full d-flex align-items-center justify-content-center position-absolute inset-0 text-stone-300 text-sm font-semibold"
+                                style="top:0;left:0;">
+                                <i class="text-4xl text-stone-200"></i>
+                            </div>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">NEW</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Classic Black Shirt</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="font-bebas text-2xl text-stone-800 tracking-wide">$24.99</span>
+                                <button onclick="addToCart('Classic Black Shirt', 24.99, '👕')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class=" text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="jacket sale" data-price="64.99"
+                    data-name="Dark Green Over Jacket">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div class="position-relative h-img-card bg-stone-100 overflow-hidden">
+                            <img src="./k.jpeg" alt="Dark Green Over Jacket" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <div class="w-full h-full d-flex align-items-center justify-content-center position-absolute inset-0 text-stone-300 text-sm"
+                                style="top:0;left:0;"><i class=" text-4xl text-stone-200"></i></div>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">−25%</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Dark Green Over Jacket</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-stone-400 line-through text-sm me-2">$89.99</span>
+                                    <span class="font-bebas text-2xl text-red-600 tracking-wide">$64.99</span>
+                                </div>
+                                <button onclick="addToCart('Dark Green Over Jacket', 64.99, '🧥')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+            <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="jacket" data-price="99.99"
+                data-name="Premium Brown Bomber">
+                <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                    <div class="position-relative h-img-card bg-stone-100 overflow-hidden">
+                        <img src="./k5.png" alt="Premium Brown Bomber" class="w-full h-full object-cover block"
+                            onerror="this.style.display='none'" />
+                        <div class="w-full h-full d-flex align-items-center justify-content-center position-absolute inset-0"
+                            style="top:0;left:0;"><i class="text-4xl text-stone-200"></i></div>
+                        <span
+                            class="position-absolute top-0 start-0 m-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">NEW</span>
+                    </div>
+                    <div class="p-4">
+                        <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                        <p class="font-bold text-stone-900 mb-3">Premium Brown Bomber</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="font-bebas text-2xl text-stone-800 tracking-wide">$99.99</span>
+                            <button onclick="addToCart('Premium Brown Bomber', 99.99, '🧥')"
+                                class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                <i class="fas fa-plus text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+                <!-- 4 -->
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="tshirt" data-price="29.99"
+                    data-name="Heavy Weight Hunt Tee">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div class="position-relative h-img-card bg-stone-100 overflow-hidden">
+                            <img src="./kk.jpeg" alt="Heavy Weight Hunt Tee" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <div class="w-full h-full d-flex align-items-center justify-content-center position-absolute inset-0"
+                                style="top:0;left:0;"><i class=" text-4xl text-stone-200"></i></div>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">NEW</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Heavy Weight Hunt Tee</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="font-bebas text-2xl text-stone-800 tracking-wide">$29.99</span>
+                                <button onclick="addToCart('Heavy Weight Hunt Tee', 29.99, '👕')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5 -->
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="jacket sale" data-price="52.99"
+                    data-name="Cream Zip Jacket">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div class="position-relative h-img-card bg-stone-100 overflow-hidden">
+                            <img src="./k4.jpeg" alt="Cream Zip Jacket" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <div class="w-full h-full d-flex align-items-center justify-content-center position-absolute inset-0"
+                                style="top:0;left:0;"><i class=" text-4xl text-stone-200"></i></div>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">−30%</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Cream Zip Jacket</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-stone-400 line-through text-sm me-2">$74.99</span>
+                                    <span class="font-bebas text-2xl text-red-600 tracking-wide">$52.99</span>
+                                </div>
+                                <button onclick="addToCart('Cream Zip Jacket', 52.99, '🧥')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6 -->
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="tshirt" data-price="21.99"
+                    data-name="White Polo Shirt">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div class="position-relative h-img-card bg-stone-100 overflow-hidden">
+                            <img src="./6.webp" alt="White Polo Shirt" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <div class="w-full h-full d-flex align-items-center justify-content-center position-absolute inset-0"
+                                style="top:0;left:0;"><i class=" text-4xl text-stone-200"></i></div>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">White Polo Shirt</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="font-bebas text-2xl text-stone-800 tracking-wide">$21.99</span>
+                                <button onclick="addToCart('White Polo Shirt', 21.99, '👕')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="pants" data-price="54.99"
+                    data-name="Dark Wash Slim Jeans">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div class="position-relative h-img-card bg-stone-100 overflow-hidden">
+                            <img src="./9.jpg" alt="Dark Wash Slim Jeans" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <div class="w-full h-full d-flex align-items-center justify-content-center position-absolute inset-0"
+                                style="top:0;left:0;"><i class="text-4xl text-stone-200"></i></div>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-amber-700 text-white text-xs font-bold px-3 py-1 rounded-full z-10">Best
+                                Seller</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Dark Wash Slim Jeans</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="font-bebas text-2xl text-stone-800 tracking-wide">$54.99</span>
+                                <button onclick="addToCart('Dark Wash Slim Jeans', 54.99, '👖')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8 -->
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="pants sale" data-price="44.99"
+                    data-name="Beige Cargo Pants">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div class="position-relative h-img-card bg-stone-100 overflow-hidden">
+                            <img src="./k2.jpeg" alt="Beige Cargo Pants" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <div class="w-full h-full d-flex align-items-center justify-content-center position-absolute inset-0 text-stone-300"
+                                style="top:0;left:0;"><i class="text-4xl text-stone-200"></i></div>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">−25%</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Beige Cargo Pants</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-stone-400 line-through text-sm me-2">$59.99</span>
+                                    <span class="font-bebas text-2xl text-red-600 tracking-wide">$44.99</span>
+                                </div>
+                                <button onclick="addToCart('Beige Cargo Pants', 44.99, '👖')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <!-- 9 – NEW EXTRA CARD -->
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="tshirt sale" data-price="18.99"
+                    data-name="Washed Oversized Tee">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div
+                            class="position-relative h-img-card bg-stone-100 overflow-hidden d-flex align-items-center justify-content-center">
+<img src="./201.webp" alt="Premium Brown Bomber" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <i class=" text-4xl text-stone-200"></i>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">−20%</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Washed Oversized Tee</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-stone-400 line-through text-sm me-2">$23.99</span>
+                                    <span class="font-bebas text-2xl text-red-600 tracking-wide">$18.99</span>
+                                </div>
+                                <button onclick="addToCart('Washed Oversized Tee', 18.99, '👕')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 10 -->
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="pants" data-price="47.99"
+                    data-name="Olive Cargo Trousers">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div
+                            class="position-relative h-img-card bg-stone-100 overflow-hidden d-flex align-items-center justify-content-center">
+<img src="./202.avif" alt="Premium Brown Bomber" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <i class=" text-4xl text-stone-200"></i>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">NEW</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Olive Cargo Trousers</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="font-bebas text-2xl text-stone-800 tracking-wide">$47.99</span>
+                                <button onclick="addToCart('Olive Cargo Trousers', 47.99, '👖')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 11 -->
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="acc" data-price="14.99"
+                    data-name="Brown Leather Belt">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div
+                            class="position-relative h-img-card bg-stone-100 overflow-hidden d-flex align-items-center justify-content-center">
+<img src="./203.jpg" alt="Premium Brown Bomber" class="w-full h-full object-cover block"
+    onerror="this.style.display='none'" />
+                            <i class="text-4xl text-stone-200"></i>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Brown Leather Belt</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="font-bebas text-2xl text-stone-800 tracking-wide">$14.99</span>
+                                <button onclick="addToCart('Brown Leather Belt', 14.99, '👜')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="acc" data-price="22.99"
+                    data-name="Drip House Cap">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div
+                            class="position-relative h-img-card bg-stone-100 overflow-hidden d-flex align-items-center justify-content-center">
+                            
+<img src="./7.jpg" alt="Drip House Cap" class="w-full h-full object-cover block"
+                                onerror="this.style.display='none'" />
+                            <div class="w-full h-full d-flex align-items-center justify-content-center position-absolute inset-0"
+                                style="top:0;left:0;"><i class="text-4xl text-stone-200"></i></div>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-amber-700 text-white text-xs font-bold px-3 py-1 rounded-full z-10">Best
+                                Seller</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Drip House Cap</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="font-bebas text-2xl text-stone-800 tracking-wide">$22.99</span>
+                                <button onclick="addToCart('Drip House Cap', 22.99, '🧢')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="jacket" data-price="79.99"
+                    data-name="Stone Wash Denim Jacket">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div
+                            class="position-relative h-img-card bg-stone-100 overflow-hidden d-flex align-items-center justify-content-center">
+<img src="./204.webp" alt="Premium Brown Bomber" class="w-full h-full object-cover block" onerror="this.style.display='none'" />
+                            <i class=" text-4xl text-stone-200"></i>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-green-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">NEW</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Stone Wash Denim Jacket</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="font-bebas text-2xl text-stone-800 tracking-wide">$79.99</span>
+                                <button onclick="addToCart('Stone Wash Denim Jacket', 79.99, '🧥')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 14 -->
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="tshirt" data-price="34.99"
+                    data-name="Graphic Drip Tee">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div
+                            class="position-relative h-img-card bg-stone-100 overflow-hidden d-flex align-items-center justify-content-center">
+<img src="./205.jpg" alt="Premium Brown Bomber" class="w-full h-full object-cover block" onerror="this.style.display='none'" />
+                            <i class=" text-4xl text-stone-200"></i>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Graphic Drip Tee</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="font-bebas text-2xl text-stone-800 tracking-wide">$34.99</span>
+                                <button onclick="addToCart('Graphic Drip Tee', 34.99, '👕')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="acc sale" data-price="11.99"
+                    data-name="Knit Beanie">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div
+                            class="position-relative h-img-card bg-stone-100 overflow-hidden d-flex align-items-center justify-content-center">
+<img src="./206.jpg" alt="Premium Brown Bomber" class="w-full h-full object-cover block" onerror="this.style.display='none'" />
+                            <i class="text-4xl text-stone-200"></i>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">−15%</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Knit Beanie</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-stone-400 line-through text-sm me-2">$13.99</span>
+                                    <span class="font-bebas text-2xl text-red-600 tracking-wide">$11.99</span>
+                                </div>
+                                <button onclick="addToCart('Knit Beanie', 11.99, '🧢')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div class="col-sm-6 col-lg-4 col-xl-3 product-item" data-cat="pants sale" data-price="38.99"
+                    data-name="Slim Chino Trousers">
+                    <div class="product-card bg-white rounded-3xl overflow-hidden shadow-sm h-100">
+                        <div
+                            class="position-relative h-img-card bg-stone-100 overflow-hidden d-flex align-items-center justify-content-center">
+<img src="./207.jpg" alt="Premium Brown Bomber" class="w-full h-full object-cover block" onerror="this.style.display='none'" />
+                            <i class=" text-4xl text-stone-200"></i>
+                            <span
+                                class="position-absolute top-0 start-0 m-3 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10">−20%</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-amber-700 font-bold text-xs tracking-widest uppercase mb-1">Drip House</p>
+                            <p class="font-bold text-stone-900 mb-3">Slim Chino Trousers</p>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <span class="text-stone-400 line-through text-sm me-2">$48.99</span>
+                                    <span class="font-bebas text-2xl text-red-600 tracking-wide">$38.99</span>
+                                </div>
+                                <button onclick="addToCart('Slim Chino Trousers', 38.99, '👖')"
+                                    class="bg-amber-700 hover:bg-amber-900 text-white w-10 h-10 rounded-full border-0 d-flex align-items-center justify-content-center transition-all">
+                                    <i class="fas fa-plus text-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div><!-- end grid -->
+
+           
+            <div id="noResults" class="hidden text-center py-5">
+                <i class="fas fa-box-open text-5xl text-stone-200 mb-3"></i>
+                <p class="text-stone-400 font-semibold mt-3">No products found in this category.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="py-5 bg-stone-950 border-t border-amber-900/20">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-4">
+                    <div class="font-bebas text-3xl text-amber-300 tracking-widest mb-3">DRIP HOUSE</div>
+                    <p class="text-amber-200/40 text-sm leading-relaxed mb-4">
+                        Your go-to destination for contemporary men's fashion. Bold style, premium quality, delivered
+                        fast.
+                    </p>
+                    <div class="d-flex gap-2">
+                        <a href="https://www.instagram.com/g_khaled_m/"
+                            class="border border-amber-800 rounded-full w-9 h-9 d-flex align-items-center justify-content-center text-amber-400 hover:bg-amber-700 hover:text-white transition-all no-underline"><i
+                                class="fab fa-instagram text-sm"></i></a>
+                        <a href="https://www.facebook.com/profile.php?id=100018322626462"
+                            class="border border-amber-800 rounded-full w-9 h-9 d-flex align-items-center justify-content-center text-amber-400 hover:bg-amber-700 hover:text-white transition-all no-underline"><i
+                                class="fab fa-facebook-f text-sm"></i></a>
+                        <a href="https://www.linkedin.com/in/khaled-mohammed-84025935a/"
+                            class="border border-amber-800 rounded-full w-9 h-9 d-flex align-items-center justify-content-center text-amber-400 hover:bg-amber-700 hover:text-white transition-all no-underline"><i
+                                class="fab fa-linkedin text-sm"></i></a>
+                        <a href="https://github.com/khaled00mohammed/DribHouse"
+                            class="border border-amber-800 rounded-full w-9 h-9 d-flex align-items-center justify-content-center text-amber-400 hover:bg-amber-700 hover:text-white transition-all no-underline"><i
+                                class="fab fa-github text-sm"></i></a>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <p class="font-bebas text-lg text-white tracking-widest mb-3">Quick Links</p>
+                    <a href="index.html#home"
+                        class="d-block text-amber-200/40 hover:text-amber-300 text-sm mb-2 no-underline">Home</a>
+                    <a href="products.html"
+                        class="d-block text-amber-300 text-sm mb-2 no-underline font-semibold">Shop</a>
+                    <a href="index.html#categories"
+                        class="d-block text-amber-200/40 hover:text-amber-300 text-sm mb-2 no-underline">Categories</a>
+                    <a href="index.html#contact"
+                        class="d-block text-amber-200/40 hover:text-amber-300 text-sm mb-2 no-underline">Contact</a>
+                </div>
+                <div class="col-6 col-lg-2">
+                    <p class="font-bebas text-lg text-white tracking-widest mb-3">Support</p>
+                    <a href="#" class="d-block text-amber-200/40 hover:text-amber-300 text-sm mb-2 no-underline">Track
+                        Order</a>
+                    <a href="#"
+                        class="d-block text-amber-200/40 hover:text-amber-300 text-sm mb-2 no-underline">Returns</a>
+                    <a href="#"
+                        class="d-block text-amber-200/40 hover:text-amber-300 text-sm mb-2 no-underline">Shipping
+                        Policy</a>
+                    <a href="#" class="d-block text-amber-200/40 hover:text-amber-300 text-sm mb-2 no-underline">Size
+                        Guide</a>
+                </div>
+                <div class="col-lg-4">
+                    <p class="font-bebas text-lg text-white tracking-widest mb-3">Get in Touch</p>
+                    <div class="d-flex flex-column gap-2">
+                        <span class="text-amber-200/40 text-sm"><i class="fas fa-phone text-amber-700 me-2"></i>+20 100
+                            000 0000</span>
+                        <span class="text-amber-200/40 text-sm"><i
+                                class="fas fa-envelope text-amber-700 me-2"></i>hello@driphouse.com</span>
+                        <span class="text-amber-200/40 text-sm"><i
+                                class="fas fa-map-marker-alt text-amber-700 me-2"></i>Cairo, Egypt</span>
+                        <span class="text-amber-200/40 text-sm"><i class="fas fa-clock text-amber-700 me-2"></i>Sat –
+                            Thu: 10am – 10pm</span>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="d-flex align-items-center justify-content-between flex-wrap gap-2 mt-5 pt-4 border-t border-amber-900/20">
+                <p class="text-amber-200/25 text-xs mb-0">© 2026 DRIP HOUSE. All rights reserved.</p>
+                <div class="d-flex gap-2">
+                    <span class="bg-white/5 text-amber-200/30 text-xs font-bold px-3 py-1 rounded">VISA</span>
+                    <span class="bg-white/5 text-amber-200/30 text-xs font-bold px-3 py-1 rounded">MASTERCARD</span>
+                    <span class="bg-white/5 text-amber-200/30 text-xs font-bold px-3 py-1 rounded">CASH</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== MODALS ===== -->
+    <div id="loginModal" onclick="handleOverlayClick(event,'loginModal')"
+        class="hidden fixed inset-0 bg-black/60 z-[2000] items-center justify-content-center">
+        <div class="bg-white rounded-3xl p-5 shadow-xl position-relative w-full max-w-modal mx-3">
+            <button onclick="closeModal('loginModal')"
+                class="position-absolute top-0 end-0 m-3 bg-stone-100 border-0 rounded-full w-9 h-9 d-flex align-items-center justify-content-center text-stone-500"><i
+                    class="fas fa-times"></i></button>
+            <div class="text-center mb-4">
+                <div class="font-bebas text-4xl tracking-widest text-stone-900">Welcome Back</div>
+                <p class="text-stone-400 text-sm mt-1">Login to your Drip House account</p>
+            </div>
+            <div class="d-flex flex-column gap-3">
+                <div><label class="text-stone-600 font-semibold text-sm mb-1 d-block">Email</label><input type="email"
+                        placeholder="Email@example.com"
+                        class="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500" />
+                </div>
+                <div><label class="text-stone-600 font-semibold text-sm mb-1 d-block">Password</label><input
+                        type="password" placeholder="••••••••"
+                        class="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500" />
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <label class="d-flex align-items-center gap-2 text-sm text-stone-500"><input type="checkbox" />
+                        Remember me</label>
+                    <a href="#" class="text-amber-700 text-sm font-semibold no-underline hover:underline">Forgot
+                        password?</a>
+                </div>
+                <button
+                    class="bg-amber-700 hover:bg-amber-900 text-white font-bold py-3 rounded-xl border-0 w-full transition-all">Login</button>
+                <p class="text-center text-stone-400 text-sm mb-0">Don't have an account? <a href="#"
+                        onclick="switchModal('loginModal','registerModal')"
+                        class="text-amber-700 font-bold no-underline hover:underline">Register</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div id="registerModal" onclick="handleOverlayClick(event,'registerModal')"
+        class="hidden fixed inset-0 bg-black/60 z-[2000] items-center justify-content-center">
+        <div class="bg-white rounded-3xl p-5 shadow-xl position-relative w-full max-w-modal mx-3">
+            <button onclick="closeModal('registerModal')"
+                class="position-absolute top-0 end-0 m-3 bg-stone-100 border-0 rounded-full w-9 h-9 d-flex align-items-center justify-content-center text-stone-500"><i
+                    class="fas fa-times"></i></button>
+            <div class="text-center mb-4">
+                <div class="font-bebas text-4xl tracking-widest text-stone-900">Create Account</div>
+                <p class="text-stone-400 text-sm mt-1">Join Drip House today</p>
+            </div>
+            <div class="d-flex flex-column gap-3">
+                <div class="row g-3">
+                    <div class="col-6"><label class="text-stone-600 font-semibold text-sm mb-1 d-block">First
+                            Name</label><input type="text" placeholder="First Name"
+                            class="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500" />
+                    </div>
+                    <div class="col-6"><label class="text-stone-600 font-semibold text-sm mb-1 d-block">Last
+                            Name</label><input type="text" placeholder="Last Name"
+                            class="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500" />
+                    </div>
+                </div>
+                <div><label class="text-stone-600 font-semibold text-sm mb-1 d-block">Email</label><input type="email"
+                        placeholder="Email@example.com"
+                        class="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500" />
+                </div>
+                <div><label class="text-stone-600 font-semibold text-sm mb-1 d-block">Password</label><input
+                        type="password" placeholder="••••••••"
+                        class="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500" />
+                </div>
+                <div><label class="text-stone-600 font-semibold text-sm mb-1 d-block">Confirm Password</label><input
+                        type="password" placeholder="••••••••"
+                        class="w-full border border-stone-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-amber-500" />
+                </div>
+                <button
+                    class="bg-amber-700 hover:bg-amber-900 text-white font-bold py-3 rounded-xl border-0 w-full transition-all">Create
+                    Account</button>
+                <p class="text-center text-stone-400 text-sm mb-0">Already have an account? <a href="#"
+                        onclick="switchModal('registerModal','loginModal')"
+                        class="text-amber-700 font-bold no-underline hover:underline">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== CART SIDEBAR ===== -->
+    <div id="cartOverlay" onclick="closeCart()" class="hidden fixed inset-0 bg-black/60 z-[1040]"></div>
+    <div id="cartSidebar"
+        class="fixed top-0 right-0 h-full w-cart-side max-w-cart-side bg-stone-50 z-[1050] flex flex-col shadow-cart transition-transform duration-300 translate-x-full">
+        <div class="bg-stone-900 px-5 py-4 d-flex align-items-center justify-content-between">
+            <span class="font-bebas text-2xl text-white tracking-widest">🛍️ Your Cart</span>
+            <button onclick="closeCart()"
+                class="bg-white/10 hover:bg-amber-700 text-white border-0 rounded-full w-9 h-9 d-flex align-items-center justify-content-center transition-all"><i
+                    class="fas fa-times"></i></button>
+        </div>
+        <div id="cartItems" class="flex-grow-1 overflow-auto px-4 py-3"></div>
+        <div id="cartFooter" class="hidden bg-white px-5 py-4 border-t border-amber-200">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="font-semibold text-stone-600">Total</span>
+                <span id="cartTotal" class="font-bebas text-3xl text-stone-800 tracking-wide">$0.00</span>
+            </div>
+            <button
+                class="w-full bg-amber-700 hover:bg-amber-900 text-white font-bold py-3 rounded-2xl border-0 transition-all">
+                <i class="fas fa-lock me-2"></i> Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toastContainer" class="fixed bottom-5 left-5 z-[9999] flex flex-col gap-2"></div>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script>
+        // ── Shared cart via localStorage ──────────────────────────────────────────
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+        function saveCart() { localStorage.setItem('cart', JSON.stringify(cart)); }
+
+        function addToCart(name, price, emoji) {
+            const found = cart.find(i => i.name === name);
+            found ? found.qty++ : cart.push({ name, price, emoji, qty: 1 });
+            renderCart();
+            saveCart();
+            showToast(`✅ "${name}" added to cart`);
+            const b = document.getElementById('cartBadge');
+            b.style.transform = 'scale(1.6)';
+            setTimeout(() => b.style.transform = 'scale(1)', 250);
+        }
+
+        function renderCart() {
+            const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            const count = cart.reduce((s, i) => s + i.qty, 0);
+            document.getElementById('cartBadge').textContent = count;
+
+            const itemsEl = document.getElementById('cartItems');
+            const footerEl = document.getElementById('cartFooter');
+
+            if (!cart.length) {
+                itemsEl.innerHTML = `
+          <div class="text-center py-5 text-stone-400">
+            <i class="fas fa-shopping-bag text-5xl text-stone-200 mb-3"></i>
+            <p class="mt-3">Your cart is empty.<br/>Start shopping!</p>
+          </div>`;
+                footerEl.classList.add('hidden');
+                return;
+            }
+
+            footerEl.classList.remove('hidden');
+            document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+            itemsEl.innerHTML = cart.map((item, idx) => `
+        <div class="d-flex align-items-center gap-3 py-3 border-b border-amber-100">
+          <div class="rounded-xl d-flex align-items-center justify-content-center flex-shrink-0 w-cart-thumb h-cart-thumb bg-cart-thumb-bg text-3xl">${item.emoji}</div>
+          <div class="flex-grow-1">
+            <p class="font-bold text-stone-900 text-sm mb-1">${item.name}</p>
+            <p class="text-amber-700 font-bebas tracking-wide">$${(item.price * item.qty).toFixed(2)}</p>
+            <div class="d-flex align-items-center gap-2 mt-1">
+              <button onclick="changeQty(${idx},-1)" class="border border-amber-300 rounded-full bg-amber-50 text-stone-700 font-bold text-xs w-6 h-6 d-flex align-items-center justify-content-center">−</button>
+              <span class="font-bold text-sm">${item.qty}</span>
+              <button onclick="changeQty(${idx},1)" class="border border-amber-300 rounded-full bg-amber-50 text-stone-700 font-bold text-xs w-6 h-6 d-flex align-items-center justify-content-center">+</button>
+            </div>
+          </div>
+          <button onclick="removeItem(${idx})" class="text-stone-300 hover:text-red-500 border-0 bg-transparent"><i class="fas fa-trash-alt"></i></button>
+        </div>`).join('');
+        }
+
+        function changeQty(idx, d) {
+            cart[idx].qty += d;
+            if (cart[idx].qty <= 0) cart.splice(idx, 1);
+            renderCart(); saveCart();
+        }
+
+        function removeItem(idx) {
+            cart.splice(idx, 1);
+            renderCart(); saveCart();
+            showToast('🗑️ Item removed');
+        }
+
+        function openCart() {
+            document.getElementById('cartSidebar').classList.remove('translate-x-full');
+            document.getElementById('cartOverlay').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeCart() {
+            document.getElementById('cartSidebar').classList.add('translate-x-full');
+            document.getElementById('cartOverlay').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // ── Filter ────────────────────────────────────────────────────────────────
+        function doFilter(cat, btn) {
+            document.querySelectorAll('.filter-tab').forEach(b => {
+                b.classList.remove('active', 'bg-amber-700', 'text-white');
+                b.classList.add('bg-transparent', 'text-amber-900');
+            });
+            btn.classList.add('active', 'bg-amber-700', 'text-white');
+            btn.classList.remove('bg-transparent', 'text-amber-900');
+
+            const items = document.querySelectorAll('.product-item');
+            let visible = 0;
+            items.forEach(el => {
+                const show = cat === 'all' || el.dataset.cat.includes(cat);
+                el.style.display = show ? '' : 'none';
+                if (show) visible++;
+            });
+
+            document.getElementById('resultCount').textContent =
+                cat === 'all' ? `Showing all ${visible} products` : `Showing ${visible} product${visible !== 1 ? 's' : ''} in "${btn.textContent.trim()}"`;
+
+            document.getElementById('noResults').classList.toggle('hidden', visible > 0);
+        }
+
+        // ── Sort ──────────────────────────────────────────────────────────────────
+        function doSort(val) {
+            const grid = document.getElementById('productsGrid');
+            const items = [...grid.querySelectorAll('.product-item')];
+            items.sort((a, b) => {
+                if (val === 'price-asc') return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+                if (val === 'price-desc') return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+                if (val === 'name') return a.dataset.name.localeCompare(b.dataset.name);
+                return 0;
+            });
+            items.forEach(el => grid.appendChild(el));
+        }
+
+        // ── Toast ─────────────────────────────────────────────────────────────────
+        function showToast(msg) {
+            const wrap = document.getElementById('toastContainer');
+            const t = document.createElement('div');
+            t.className = 'bg-stone-900 text-white px-4 py-2 rounded-xl text-sm font-semibold border-l-4 border-amber-700 max-w-xs';
+            t.textContent = msg;
+            wrap.appendChild(t);
+            setTimeout(() => { t.style.opacity = '0'; t.style.transition = '.3s'; }, 2500);
+            setTimeout(() => t.remove(), 2800);
+        }
+
+        // ── Modals ────────────────────────────────────────────────────────────────
+        function openModal(id) {
+            const m = document.getElementById(id);
+            m.classList.remove('hidden'); m.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            m.classList.add('hidden'); m.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+        function switchModal(a, b) { closeModal(a); openModal(b); }
+        function handleOverlayClick(e, id) { if (e.target === document.getElementById(id)) closeModal(id); }
+
+        // ── Init ──────────────────────────────────────────────────────────────────
+        renderCart();
+        document.getElementById('resultCount').textContent =
+            `Showing all ${document.querySelectorAll('.product-item').length} products`;
+    </script>
+</body>
+
+</html>
