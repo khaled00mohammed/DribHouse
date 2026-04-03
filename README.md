@@ -5,7 +5,7 @@ A modern fashion e-commerce website for men built using HTML, CSS, JavaScript, B
 ---
 
 ## 🚀 Live Demo
-🔗 [View Website]([https://khaled00mohammed.github.io/DribHouse/)
+🔗 [View Website](https://khaled00mohammed.github.io/DribHouse/)
 
 ---
 
