@@ -9,24 +9,6 @@ A modern fashion e-commerce website for men built using HTML, CSS, JavaScript, B
 
 ---
 
-## 📸 Screenshots
-
-<p align="center">
-  <img src="website pic/1.png" width="45%" />
-  <img src="website pic/2.png" width="45%" />
-</p>
-
-<p align="center">
-  <img src="website pic/3.png" width="45%" />
-  <img src="website pic/4.png" width="45%" />
-</p>
-
-<p align="center">
-  <img src="website pic/5.png" width="45%" />
-  <img src="website pic/6.png" width="45%" />
-</p>
----
-
 ## 🛠️ Technologies Used
 - HTML5
 - CSS3
